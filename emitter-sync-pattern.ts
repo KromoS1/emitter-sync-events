@@ -74,6 +74,7 @@ class EventHandler extends EventStatistics<EventName> {
 		})
 	}
 
+	// Для решения я использовал Long Pulling для передачи данных в удаленное хранилище.
 	async pooling(evenOdd: number) {
 		const currentEvent = evenOdd % 2 === 0 ? EventName.EventA : EventName.EventB
 
@@ -82,7 +83,7 @@ class EventHandler extends EventStatistics<EventName> {
 			this.getStats(currentEvent) - this.repository.getStats(currentEvent)
 		)
 
-		//  первый вариант реализации, при котором перед каждым сохранением мы ожидаем то количество милисекунд,через которое УД(удаленное хранилище принимает запроос, чтоо избежать лишних ошибок EventRepositoryError.TOO_MANY)
+		//  первый вариант реализации, при котором перед каждым сохранением мы ожидаем то количество милисекунд,через которое УД(удаленное хранилище) принимает запроос, чтоо избежать лишних ошибок EventRepositoryError.TOO_MANY)
 		// await awaitTimeout(300)
 		// здесь используем Long Pooling для постоянных запросов на УД. В зависимости от ответа, если сохранил УД событие, переходим к след событию, если нет, повторяем предыдущее.
 		// await this.pooling(response ? evenOdd + 1 : evenOdd)
